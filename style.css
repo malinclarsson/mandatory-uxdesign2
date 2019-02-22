@@ -1,18 +1,18 @@
- * {
-  font-family: 'Montserrat Alternates', sans-serif;
-    font-size: 14px;
-  }
-  body {
-    margin-top: 30px;
-    background-color: #d3d3d3;
-  }
-  /*=============== header ===============*/
-  h2 {
-    font-size: 17px;
-    margin-left: 25px;
-    margin-right: 25px;
-  }
-.mds-header{ /* header */
+* {
+  font-family: "Montserrat Alternates", sans-serif;
+  font-size: 14px;
+}
+body {
+  margin-top: 30px;
+  background-color: #d3d3d3;
+}
+/*=============== header ===============*/
+h2 {
+  font-size: 17px;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+.mds-header { /* header */
   width: 100%;
   height: 80px;
 
@@ -20,56 +20,57 @@
   align-items: center;
   background-color: #5ace5a;
 }
-.mds-header-icon{
+.mds-header-icon {
   cursor: pointer;
   font-weight: bold;
   font-size: 24px;
   position: absolute;
   left: 10px;
 }
-.mds-header-text{
+.mds-header-text {
   font-weight: bold;
   font-size: 24px;
   position: absolute;
-  left: 60px; 
+  left: 60px;
 }
-   /*=============== body of game ===============*/
-  .mds-border{   
-    height: 800px;
-    width: 380px;
-    margin: 0 auto;
-    align-items: center;
-    display: flex;
+/*=============== body of game ===============*/
+.mds-border {
+  height: 800px;
+  width: 380px;
+  margin: 0 auto;
+  align-items: center;
+  display: flex;
 }
-.mds-container{ /* inside background*/
-  position:relative;
+.mds-container {
+  /* inside background*/
+  position: relative;
   background-color: #fff;
   height: 700px;
   width: 360px;
   margin: 0 auto;
   transition: 0.5s;
 }
-.mds-scroll{ /* scrolling behind app_bar*/
+.mds-scroll { /* scrolling behind app_bar*/
   width: 100%;
   height: 620px;
   overflow: auto;
 }
-.mds-body{
+.mds-body {
   position: relative;
   width: 100%;
   height: 100%;
 }
-.mds-display-none{ /*hides the menu */
+.mds-display-none { /*hides the menu */
   display: none;
 }
 
 /*======================================== MAIN SCREEN ========================================*/
-.mds-body-button{ /*button - start quiz*/
+.mds-body-button { /*button - start quiz*/
   position: absolute;
   top: 47%;
   left: 31%;
   background-color: #5ace5a;
-  color:#fff;
+  color: #fff;
   font-size: 16px;
   padding: 10px 20px;
   border-radius: 10px;
@@ -77,12 +78,12 @@
   text-decoration: none;
   cursor: pointer;
 }
-.mds-choise{
+.mds-choise {
   display: flex;
   height: 50px;
   justify-content: flex-end;
 }
-.mds-choise-button{
+.mds-choise-button {
   margin-right: 38px;
   margin-top: 13px;
   cursor: pointer;
@@ -96,7 +97,7 @@ li {
   flex-direction: row;
   align-items: center;
 }
-.mds-body-doneButton{ /*button - done with quiz*/
+.mds-body-doneButton { /*button - done with quiz*/
   left: 36%;
   background-color: #5ace5a;
   color: #fff;
@@ -111,7 +112,7 @@ li {
   margin-bottom: 42px;
 }
 /*=============== radiobuttons ===============*/
-.mds-radio-input{
+.mds-radio-input {
   height: 20px;
   width: 20px;
   opacity: 0.01;
@@ -123,7 +124,7 @@ li {
   display: block;
   width: 20px;
   height: 20px;
-  border:2px solid gray;
+  border: 2px solid gray;
   border-radius: 50%;
   position: absolute;
   transition: 100ms ease-in-out;
@@ -140,59 +141,59 @@ li {
   opacity: 0.01;
   transition: 100ms ease-in-out;
 }
-.mds-radio-input:checked ~ .mds-radio-border{
+.mds-radio-input:checked ~ .mds-radio-border {
   border: 2px solid #5ace5a;
 }
-.mds-radio-input:checked ~.mds-radio-toogle{
+.mds-radio-input:checked ~ .mds-radio-toogle {
   opacity: 1;
 }
 /*======================================== MODAL DIALOG =======================================*/
-.mds-popup{
+.mds-popup { /*box*/
   height: 180px;
   width: 280px;
   background-color: #fff;
-  border-radius: 16px;
+  border-radius: 5px;
   position: absolute;
   top: 263px;
   left: 38px;
 }
-.mds-popup-title--text{
+.mds-popup-title--text { /*title*/
   font-size: 21px;
   font-weight: bold;
   margin-top: 27px;
   margin-left: 28px;
   margin-bottom: 0px;
 }
-.mds-popup-supporting--text{
+.mds-popup-supporting--text { /*title*/
   font-size: 16px;
   margin-left: 31px;
   margin-top: 17px;
 }
 /*======================================== DRAWER MENU ========================================*/
-h3{
+h3 {
   margin-left: 25px;
   margin-top: 13px;
 }
-.mds-menubar{
+.mds-menubar {
   height: 700px;
   width: 0px;
-  transition: .5s;
+  transition: 0.5s;
   top: 0px;
   z-index: 10000;
   overflow-x: hidden; /*hides the menu text*/
   background-color: #fff;
 }
-.mds-menubar-title{
+.mds-menubar-title {
   width: 100%;
   height: 200px;
   border-bottom: 1px solid #5ace5a;
   background-color: #5ace5a;
 }
-.mds-menubar-list{
+.mds-menubar-list {
   width: 100%;
   height: 500px;
 }
-.mds-menubar-list-item{
+.mds-menubar-list-item {
   width: 100%;
   height: 80px;
   background-color: #fff;
@@ -201,37 +202,36 @@ h3{
   align-items: center;
   cursor: pointer;
 }
-.mds-menubar-title-text{
+.mds-menubar-title-text {
   font-size: 20px;
   padding-left: 25px;
   padding-top: 84px;
   margin: 0;
 }
-.mds-menubar-title-info{
+.mds-menubar-title-info {
   padding-left: 25px;
   margin-top: 8px;
 }
-.mds-menubar-list-item:hover{
+.mds-menubar-list-item:hover {
   background-color: #5ace5a;
-  color:#fff;
+  color: #fff;
 }
 /*======================================== STATS SCREEN =======================================*/
-.mds-stats{npm installprettier
+.mds-stats {
   position: relative;
   width: 100%;
   height: 100%;
 }
-.mds-stats-box{
+.mds-stats-box {
   height: 80px;
   width: 280px;
-  
 }
-.mds-stats-title{
+.mds-stats-title {
   font-weight: bold;
   margin-left: 25px;
-  padding:0;
+  padding: 0;
 }
-.mds-stats-text{
+.mds-stats-text {
   margin-left: 28px;
   font-size: 28px;
 }
@@ -245,7 +245,7 @@ p {
   width: 100%;
   height: 100%;
 }
-.mds-about-text{
+.mds-about-text {
   margin: 30px;
   font-size: 18px;
 }

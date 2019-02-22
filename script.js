@@ -1,61 +1,17 @@
-//======================================== VARIABLES ========================================//
-
-
-const modalDialog = document.querySelector(".mds-popup");
-const container = document.querySelector (".mds-container");
-const menuIcon = document.querySelector (".mds-header-icon ");
-const menu = document.querySelector(".mds-menubar");
-const menuItems = document.querySelectorAll(".mds-menubar-list-item");
-const statsContainer = document.querySelector (".mds-stats");
-const aboutContainer = document.querySelector(".mds-about");
-
-let menuTitle = document.querySelector(".mds-header-text");
-
-let stats = {
-        gamesplayed: "" ,
-        right:"",
-        incorrectanswer:"",
-        correctpercentage:"",
-}
-let gamesPlayed = 0;
-let numberOfWrong = 0;
-let percentage = 0;
-let allCorrect = 0;
+/*======================================== VARIABLES ========================================*/
 let count = 1;
-let allCorrectAnswer = [];
+let allCorrect = 0;
 let playerAnswer = [];
-let numOfCorrectAnswer = 0;
+let allCorrectAnswer = [];
+//===== stats =====//
+let gamesPlayed = 0;
+let rightAnswers = 0;
+let wrongAnswers = 0;
+let percentage = 0;
 
-//======================================== DATA ========================================//
-//========== function getData ==========//
-function getData (){
-  return fetch("https://opentdb.com/api.php?amount=10&category=20&difficulty=easy&type=multiple")
- .then  (response => response.json())
- .then (response => {return response;})
- .catch (error => console.error ("Error", error));
-}
-
-/*
-function getData (){
-  const baseURL = 'https://opentdb.com/api.php?amount=10&category=20&difficulty=easy&type=multiple';
-
-axios.get(baseURL)
-  .then(function (response) {
-    console.log(response.status + " " + response.statusText); // <-- "200 OK"
-    //console.log(response.data.results);// <-- get the whole object.
-    console.log(response.data.results[0].question); //<-- get the first indexed question
-    console.log(response.data.results[0].correct_answer); //<-- get the first indexed correct answer
-    console.log(response.data.results[0].incorrect_answers); //<-- get the first indexed incorrect answer
-    //console.log(response.data.results[0].incorrect_answers[2]); //<--  the indexed incorrect answer
-  })
-  .catch(function (error) {
-    console.log(error);
-    console.log(error.response.status);
-  });
-}
-*/
-//======================================== BOARD ========================================//
+/*======================================== MAIN SCREEN =========================================*/
 //========== function startQuiz ==========//
+const container = document.querySelector (".mds-container");
 const startButton = document.querySelector(".mds-body-button");
 
 startButton.addEventListener ("click", () =>{
@@ -63,25 +19,33 @@ startButton.addEventListener ("click", () =>{
   quizBox.dataset.type = "active";
 
   getData()
-  .then (res => renderQuiz(res));
+  .then (response => renderData(response));
 });
+/*======================================== QUIZ SCREEN =========================================*/
+//========== function getData ==========//
+function getData (){
+  return fetch("https://opentdb.com/api.php?amount=10&category=32&difficulty=easy&type=multiple")
+ .then  (response => response.json())
+ .then (response => {return response;})
+ .catch (error => console.error ("Error", error));
+}
 
 //========== function renderData ==========//
 const quizBox = document.querySelector(".mds-body");
 
-function renderQuiz (data){
+function renderData (data){
   let answer = [];
-  let quizHeadline = document.createElement("h3");
-  quizHeadline.innerHTML = "Quiz "+(gamesPlayed+1);
-  quizBox.appendChild (quizHeadline);
+  let quizTitle = document.createElement("h3");
+  quizTitle.innerHTML = "Quiz "+(gamesPlayed+1);
+  quizBox.appendChild (quizTitle);
   let array = data.results;
   for (let i = 0; i < array.length;i++){
       let question = array[i].question;
       let questionText = document.createElement("h2");
       questionText.innerHTML = question;
       quizBox.appendChild(questionText);
-      answer = randomAnswer(array[i].correct_answer,array[i].incorrect_answers);
-      renderAnswer(answer);
+      answer = randomizer(array[i].correct_answer,array[i].incorrect_answers);
+      renderOptions(answer);
       count ++;
   }
   let doneButton = document.createElement("button");
@@ -92,8 +56,8 @@ function renderQuiz (data){
 }
 
 //========== function randomize ==========//
-function randomAnswer(correct,wrong){
-  SaveCorrectAnswer (correct);
+function randomizer(correct,wrong){
+  SaveRightAnswer (correct);
   wrong.push(correct);
       let j,x,i;
       for (i = wrong.length -1; i > 0; i--){
@@ -106,32 +70,32 @@ function randomAnswer(correct,wrong){
   return wrong;
 }
 
-//========== function renderAnswers ==========//
-function renderAnswer (answer){
-  let ulTag = document.createElement("ul");
-  quizBox.appendChild(ulTag);
+//========== function renderOptions ==========//
+function renderOptions (answer){
+  let options = document.createElement("ul");
+  quizBox.appendChild(options);
   for(let i = 0; i < answer.length;i++){
-      let liTag = document.createElement("li");
-      let inputTag = document.createElement ("input");
-      let spanTag1 = document.createElement("span");
-      let spanTag2 = document.createElement("span");
-      let pTag = document.createElement("p");
-      giveAttributes(inputTag,{
+      let list = document.createElement("li");
+      let input = document.createElement ("input");
+      let radioBorder = document.createElement("span");
+      let radioToggle = document.createElement("span");
+      let option = document.createElement("p");
+      giveAttributes(input,{
           type: "radio",
           name: "radio"+count,
           value: answer[i],
       });
-      inputTag.className ="mds-radio-input";
-      spanTag1.className = "mds-radio-border";
-      spanTag2.className = "mds-radio-toogle";
-      pTag.innerHTML = answer[i];
-      ulTag.appendChild(liTag);
-      liTag.appendChild(inputTag);
-      liTag.appendChild(spanTag1);
-      liTag.appendChild(spanTag2);
-      liTag.appendChild(pTag);
+      input.className ="mds-radio-input";
+      radioBorder.className = "mds-radio-border";
+      radioToggle.className = "mds-radio-toogle";
+      option.innerHTML = answer[i];
+      options.appendChild(list);
+      list.appendChild(input);
+      list.appendChild(radioBorder);
+      list.appendChild(radioToggle);
+      list.appendChild(option);
   }
-  quizBox.scrollIntoView();
+  quizBox.scroll();
 }
 
 //========== function getAttributes ==========//
@@ -144,40 +108,35 @@ function giveAttributes(element,obj){
 }
 
 //========== function checkCorectAnswers ==========//
-function SaveCorrectAnswer(correct){
+function SaveRightAnswer(correct){
   allCorrectAnswer.push(correct);
 }
 
 //========== function checkAnswers ==========//
 function checkanswer (){
-  let inputTags = document.querySelectorAll("input");
-  numOfCorrectAnswer = 0;
-  for (let i = 0; i < inputTags.length;i++){
-      if (inputTags[i].type === "radio" && inputTags[i].checked){
-          playerAnswer.push(inputTags[i].value);
+  let inputs = document.querySelectorAll("input");
+  rightAnswers = 0;
+  for (let i = 0; i < inputs.length;i++){
+      if (inputs[i].type === "radio" && inputs[i].checked){
+          playerAnswer.push(inputs[i].value);
       }
       else {continue;}
   }
  for (let i = 0; i < playerAnswer.length;i++){
       if(playerAnswer[i] === allCorrectAnswer[i]){
-          numOfCorrectAnswer++;
+          rightAnswers++;
       }
  }
- popUpFunction();
+ modalDialogFunction();
 }
+/*======================================== MODAL DIALOG ========================================*/
+const modalDialog = document.querySelector(".mds-popup");
 
-//========== function quizDone==========// <-- when you click the done-button
-
-//========== function back to start ==========//
-
-
-//======================================== MODAL DIALOG ========================================//
-//========== function modalDialog ==========// <-- correct answers
-function popUpFunction (){
+function modalDialogFunction (){
   modalDialog.classList.remove("mds-display-none");
   container.style.backgroundColor  = "#ADADAD";
   let dialogtext = document.querySelector(".mds-popup-supporting--text");
-  dialogtext.innerHTML = "You answered "+ numOfCorrectAnswer +"/10 questions correct";
+  dialogtext.innerHTML = "You answered "+ rightAnswers +"/10 questions correct";
   let closeButton = document.querySelector(".close");
   let reStartButton = document.querySelector(".re-start");
   closeButton.addEventListener("click",closeFunction);
@@ -186,35 +145,38 @@ function popUpFunction (){
 
 //========== function modalDialog-new game ==========//
 function reStartFunction (){
-  savePlayerStats();
-  numOfCorrectAnswer = 0;
-  clearHtmlFunction();
+  saveStats();
+  rightAnswers = 0;
+  clearAll();
   allCorrectAnswer = [];
   playerAnswer = [];
   getData()
-  .then (res => renderQuiz(res));
+  .then (res => renderData(res));
 }
 
 //========== function modalDialog-close ==========//
 function closeFunction (){
-  clearHtmlFunction();
+  clearAll();
   menuIcon.dataset.click = "inactive";
   startButton.classList.remove("mds-display-none");
 
 }
 
 //========== function back to start ==========//
-// Clear all html to go back to the beginning
-function clearHtmlFunction (){
+
+function clearAll (){
   while (quizBox.firstChild) {
       quizBox.removeChild(quizBox.firstChild);
   }
   modalDialog.classList.add ("mds-display-none");
   container.style.backgroundColor  = "#fff";
 }
+/*======================================== DRAWER MENU =========================================*/
+const menuIcon = document.querySelector (".mds-header-icon ");
+const menu = document.querySelector(".mds-menubar");
+const menuItems = document.querySelectorAll(".mds-menubar-list-item");
+let menuTitle = document.querySelector(".mds-header-text");
 
-//======================================== MENU ========================================//
-//========== function menu ==========//
 menuIcon.addEventListener("click", iconFunction);
 
 function iconFunction(){
@@ -259,25 +221,29 @@ for (let bar of menuItems){
             aboutFunction();
         }
     })
+} 
+/*======================================== STATS SCREEN ========================================*/
+const statsContainer = document.querySelector (".mds-stats");
+let stats = {
+  gamesplayed: "" ,
+  right:"",
+  incorrectanswer:"",
+  correctpercentage:"",
 }
 
-//========== function game screen ==========//
-
-//========== function stats ==========//
-// Save stats from game in a object.
-function savePlayerStats (){
+function saveStats (){
   gamesPlayed = gamesPlayed + 1;
-  allCorrect = allCorrect + numOfCorrectAnswer;
+  allCorrect = allCorrect + rightAnswers;
   percentage = percentage + (allCorrect / (10 * gamesPlayed));
-  numberOfWrong =  numberOfWrong + (10 - numOfCorrectAnswer);
+  wrongAnswers =  wrongAnswers + (10 - rightAnswers);
 
   stats = {
       gamesplayed: gamesPlayed,
       right: allCorrect,
-      incorrectanswer: numberOfWrong,
+      incorrectanswer: wrongAnswers,
       correctpercentage: percentage,
   };
-  numOfCorrectAnswer = 0;
+  rightAnswers = 0;
 }
 //------------//
 function statsFunction (){
@@ -298,8 +264,9 @@ function renderStats (){
   document.querySelector(".incorrect").innerHTML = (stats.incorrectanswer);
   document.querySelector(".percentage").innerHTML = (stats.correctpercentage)*100 +"%";
 }
+/*======================================== ABOUT SCREEN ========================================*/
+const aboutContainer = document.querySelector(".mds-about");
 
-//========== function about ==========//
 function aboutFunction (){
   menuTitle.innerHTML = "About";
   quizBox.classList.add("mds-display-none")
@@ -309,12 +276,3 @@ function aboutFunction (){
   menu.style.width ="0px";
   aboutContainer.classList.remove("mds-display-none")
 }
-
-
-
-/*======================================== MAIN SCREEN ========================================*/
-/*======================================== QUIZ SCREEN ========================================*/
-/*======================================== MODAL DIALOG ========================================*/
-/*======================================== DRAWER MENU ========================================*/
-/*======================================== STATS SCREEN ========================================*/
-/*======================================== ABOUT SCREEN ========================================*/
