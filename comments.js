@@ -1,47 +1,44 @@
 /*======================================== VARIABLES ========================================*/
-let count = 1;
-let allCorrect = 0;
-let answer = [];
-let allCorrectAnswer = [];
+let count = 1; //number of questions rendered - in total
+let allCorrect = 0;  //number of correct answers in currrent game
+let playerAnswer = []; //array for answers
+let allCorrectAnswer = []; // //array for all the correct answers
 //===== stats =====//
-let gamesPlayed = 0;
-let rightAnswers = 0;
-let wrongAnswers = 0;
-let percentage = 0;
-
+let gamesPlayed = 0; //number of games played
+let rightAnswers = 0; //number of right answers in currrent game
+let wrongAnswers = 0; //number of wrong answers in currrent game
+let percentage = 0; //persentage of right answers
 
 
 
 /*======================================== MAIN SCREEN =========================================*/
 //========== function startQuiz ==========//                                                                        --> 1. start the quiz
-const container = document.querySelector (".mds-container");
-const startButton = document.querySelector(".mds-body-button");
+const container = document.querySelector (".mds-container"); //header + game board
+const startButton = document.querySelector(".mds-body-button"); //start button for game
 
-startButton.addEventListener ("click", () =>{
-  startButton.classList.add ("mds-display-none");
-  quizBox.dataset.type = "active";
+startButton.addEventListener ("click", () =>{ //when the start button is clicked
+  startButton.classList.add ("mds-display-none"); //give it another class - which hides it.
+  quizBox.dataset.type = "active"; // <---------------------------
 
-  getData()
-  .then (response => renderData(response));
+  getData() //calling function getData
+  .then (response => renderData(response));//wait for getData to return, then call the function renderData
 });
-
 
 
 
 
 /*======================================== QUIZ SCREEN =========================================*/
 //========== function getData ==========//                                                                          --> 2. get data from api
-function getData (){
-  return fetch("https://opentdb.com/api.php?amount=10&category=32&difficulty=easy&type=multiple")
- .then  (response => response.json())
- .then (response => {return response;})
- .catch (error => console.error ("Error", error));
+function getData (){ //function getData
+  return fetch("https://opentdb.com/api.php?amount=10&category=32&difficulty=easy&type=multiple") //request data from this url
+ .then  (response => response.json()) //parse
+ .then (response => {return response;}) //return object
+ .catch (error => console.error ("Error", error)); // if there is an error - log the "Error"-message, instead of crashing
 }
 
-//========== function randomize ==========//                                                                    --> 3. randomize questions
-function randomizer(correct,wrong){
-  SaveRightAnswer (correct);
-
+//========== function randomize ==========//                                                                    --> 3. randomize questions                                  
+function randomizer(correct,wrong){                                                                                 
+  saveRightAnswer (correct);
   wrong.push(correct);
       let j,x,i;
       for (i = wrong.length -1; i > 0; i--){
@@ -54,71 +51,63 @@ function randomizer(correct,wrong){
   return wrong;
 }
 
-//========== function renderData ==========//                                                                   --> 4. render data to game board
-const quizBox = document.querySelector(".mds-body");
+//========== function renderData ==========//                                                                     --> 4. render data to game board
+const quizBox = document.querySelector(".mds-body"); //point to the game board in the DOM
 
-function renderData (data){
-  let answer = [];
-  let quizTitle = document.createElement("h3");
-  quizTitle.innerHTML = "Quiz "+(gamesPlayed+1);
-  quizBox.appendChild (quizTitle);
-
-  let array = data.results;
+function renderData (data){ //function renderData - use data as an argument
+  let answer = []; //empty aray for answers
+  let quizTitle = document.createElement("h3"); //creates a new title for how many quizzez have been played
+  quizTitle.innerHTML = "Quiz "+(gamesPlayed+1); //sets text to "quiz"+number of games played
+  quizBox.appendChild (quizTitle); //set title inside game board
+  let array = data.results; //
   for (let i = 0; i < array.length;i++){
       let question = array[i].question;
-
       let questionText = document.createElement("h2");
       questionText.innerHTML = question;
       quizBox.appendChild(questionText);
-
       answer = randomizer(array[i].correct_answer,array[i].incorrect_answers);
-
       renderOptions(answer);
-
       count ++;
   }
   let doneButton = document.createElement("button");
-  doneButton.className ="mds-body-doneButton";
-  doneButton.innerHTML = "Done";
-
   quizBox.appendChild(doneButton);
-  doneButton.addEventListener("click",checkanswer);                                                           //--> 9. done with quiz
+  doneButton.addEventListener("click",done);
 }
 
-//========== function renderOptions ==========//
+//========== function renderOptions ==========//                                                              --> 5. render options to radiobuttons
 function renderOptions (answer){
   let options = document.createElement("ul");
   quizBox.appendChild(options);
-
   for(let i = 0; i < answer.length;i++){
       let list = document.createElement("li");
       let input = document.createElement ("input");
       let radioBorder = document.createElement("span");
       let radioToggle = document.createElement("span");
       let option = document.createElement("p");
-
-      setAttribute(input,{
+      setAttributes(input,{
           type: "radio",
           name: "radio"+count,
           value: answer[i],
       });
-      //========== radiobuttons ==========//                                                              --> 5. render options to radiobuttons
-      input.className ="mds-radio-input";
+      radioButtons();
+  }
+}
+
+//========== function radioButtons ==========//                                                             --> 6. render options to radiobuttons
+function radioButtons() {                                                                             
+  input.className ="mds-radio-input";
       radioBorder.className = "mds-radio-border";
       radioToggle.className = "mds-radio-toogle";
       option.innerHTML = answer[i];
-
       options.appendChild(list);
       list.appendChild(input);
       list.appendChild(radioBorder);
       list.appendChild(radioToggle);
       list.appendChild(option);
-  }
-  quizBox.scroll();
 }
 
-//========== function setAttributes ==========//                                                             --> 6. setAttributes 
-function setAttribute(element,obj){
+//========== function getAttributes ==========//
+function giveAttributes(element,obj){
   for (let prop in obj){
       if(obj.hasOwnProperty(prop)){
           element[prop] = obj[prop];
@@ -127,37 +116,42 @@ function setAttribute(element,obj){
 }
 
 //========== function checkAnswers ==========//                                                             --> 7. check all the answers 
-function checkanswer (){
+function checkAnswer (){
   let inputs = document.querySelectorAll("input");
-
   rightAnswers = 0;
   for (let i = 0; i < inputs.length;i++){
       if (inputs[i].type === "radio" && inputs[i].checked){
-          answer.push(inputs[i].value);
+          playerAnswer.push(inputs[i].value);
       }
       else {continue;}
   }
- for (let i = 0; i < answer.length;i++){
-      if(answer[i] === allCorrectAnswer[i]){
+ for (let i = 0; i < playerAnswer.length;i++){
+      if(playerAnswer[i] === allCorrectAnswer[i]){
           rightAnswers++;
       }
  }
- modalDialogFunction();
+ modalDialogFunction(); // call the popup-function
 }
 
-//========== function saveRightAnswers ==========//                                                         --> 8. save the correct answers
-function SaveRightAnswer(correct){
-  allCorrectAnswer.push(correct);
+//========== function saveRightAnswer ==========//                                                         --> 8. save the correct answers
+function saveRightAnswer(correct){
+  allCorrectAnswer.push(correct); //push all the right ansers to the array
 }
 
+//========== function done ==========//                                                                   --> 9. done with quiz
+function done() {
+  doneButton.className ="mds-body-doneButton";
+  doneButton.innerHTML = "Done";
 
+  checkAnswer()
+}
 
 
 
 /*======================================== MODAL DIALOG ========================================*/
 const modalDialog = document.querySelector(".mds-popup");
 
-//========== function modalDialog ==========//                                                           --> 10.1 popup - "x /10 answes rigt!"   NEW GAME/CLOSE
+//========== function modalDialog ==========//                                                          --> 10. popup - "x /10 answes rigt!"   NEW GAME/CLOSE
 function modalDialogFunction (){
   let dialogtext = document.querySelector(".mds-popup-supporting--text");
   dialogtext.innerHTML = "You got "+ rightAnswers +"/10 questions right";
@@ -172,28 +166,27 @@ function modalDialogFunction (){
   closeButton.addEventListener("click",closeFunction);
 }
 
-//========== function modalDialog - new game ==========//                                                --> 10.2 popup - NEW GAME
+//========== function modalDialog-new game ==========//                                                --> 10.1 popup - NEW GAME
 function reStartFunction (){
   saveStats();
   rightAnswers = 0;
   clearAll();
   allCorrectAnswer = [];
-  answer = [];
-
+  playerAnswer = [];
   getData()
   .then (res => renderData(res));
 }
 
-//========== function modalDialog - close ==========//                                                 --> 10.3 popup - CLOSE
+//========== function modalDialog-close ==========//                                                --> 10.2 popup - CLOSE
 function closeFunction (){
   clearAll();
-
+  
   menuIcon.dataset.click = "inactive";
   startButton.classList.remove("mds-display-none");
 
 }
 
-//========== function back to start ==========//                                                      --> 11. clear board
+//========== function clearAll (back to start) ==========//                                         --> 11. clear board
 function clearAll (){
   while (quizBox.firstChild) {
       quizBox.removeChild(quizBox.firstChild);
@@ -204,18 +197,15 @@ function clearAll (){
 
 
 
-
-
 /*======================================== DRAWER MENU =========================================*/
 const menuIcon = document.querySelector (".mds-header-icon ");
-const menu = document.querySelector(".mds-menubar");
-const menuItems = document.querySelectorAll(".mds-menubar-list-item");
+const menu = document.querySelector(".mds-menusel");
+const menuItems = document.querySelectorAll(".mds-menusel-list-item");
 let menuTitle = document.querySelector(".mds-header-text");
 
 menuIcon.addEventListener("click", hamburger);
 
 //========== function hamburger - click on menu-button==========//                                  --> 12. meu button
-
 function hamburger(){
     if (menuIcon.dataset.click === "active"){
         statsContainer.classList.add("mds-display-none");
@@ -230,7 +220,7 @@ function hamburger(){
         if (menuTitle.textContent === "Stats"){
             statsFunction();
         }  else if (menuTitle.textContent ==="About"){
-            aboutFunction();
+            about();
         }  else {
             menu.style.width ="0px";
             quizBox.classList.remove("mds-display-none");
@@ -241,13 +231,13 @@ function hamburger(){
             menuIcon.dataset.click = "active";
         }
     }
-
 }
-//========== select ==========//                                                           --> 13. select an option: GAME/STATS/ABOUT
 
-for (let bar of menuItems){
-    bar.addEventListener("click",function(e){
-        if (e.target.innerHTML === "Back to the Game"){ //                                 --> 14.1. Back to game 
+//========== function select ==========//                                                           --> 13. select an option: GAME/STATS/ABOUT
+function select () {
+  for (let sel of menuItems){
+    sel.addEventListener("click",function(e){
+        if (e.target.innerHTML === "Back to the Game"){                                           //--> 14.1. Back to game 
             statsContainer.classList.add("mds-display-none");
             aboutContainer.classList.add("mds-display-none")
             menuTitle.innerHTML = "Sir Quiz-A-Lot";
@@ -257,11 +247,11 @@ for (let bar of menuItems){
             statsFunction();
         }
         else if (e.target.innerHTML === "About"){
-            aboutFunction();
+            about();
         }
     })
-} 
-
+}
+}
 
 
 /*======================================== STATS SCREEN ========================================*/ //--> 14.2. Stats 
@@ -272,7 +262,6 @@ let stats = {
   incorrectanswer:"",
   correctpercentage:"",
 }
-
 //========== function saveStats ==========// 
 function saveStats (){
   gamesPlayed = gamesPlayed + 1;
@@ -280,7 +269,7 @@ function saveStats (){
   percentage = percentage + (allCorrect / (10 * gamesPlayed));
   wrongAnswers =  wrongAnswers + (10 - rightAnswers);
 
-  stats = { //oject with all stats-info
+  stats = {
       gamesplayed: gamesPlayed,
       right: allCorrect,
       incorrectanswer: wrongAnswers,
@@ -288,6 +277,7 @@ function saveStats (){
   };
   rightAnswers = 0;
 }
+
 //========== function statsFunction ==========// 
 function statsFunction (){
   quizBox.classList.add("mds-display-none")
@@ -297,13 +287,13 @@ function statsFunction (){
   menuIcon.dataset.click = "active"
   menuTitle.innerHTML = "Stats";
   statsContainer.classList.remove("mds-display-none")
-
   renderStats();
   menu.style.width ="0px";
 }
+
 //========== function renderStats ==========// 
 function renderStats (){
-  document.querySelector(".played").innerHTML = (stats.gamesplayed);
+  document.querySelector(".played").innerHTML = (stats.gamesplayed); //set the value of 
   document.querySelector(".correct").innerHTML = (stats.right);
   document.querySelector(".incorrect").innerHTML = (stats.incorrectanswer);
   document.querySelector(".percentage").innerHTML = (stats.correctpercentage)*100 +"%";
@@ -314,8 +304,8 @@ function renderStats (){
 /*======================================== ABOUT SCREEN ========================================*/  //--> 14.3. About
 const aboutContainer = document.querySelector(".mds-about");
 
-//========== function about ==========//
-function aboutFunction (){
+//========== function about ==========// 
+function about (){
   menuTitle.innerHTML = "About";
   quizBox.classList.add("mds-display-none")
   menuIcon.dataset.click = "active"

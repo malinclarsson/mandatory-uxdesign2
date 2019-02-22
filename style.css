@@ -50,7 +50,7 @@ h2 {
   margin: 0 auto;
   transition: 0.5s;
 }
-.mds-scroll { /* scrolling behind app_bar*/
+.mds-scroll { /* scrolling the container*/
   width: 100%;
   height: 620px;
   overflow: auto;
