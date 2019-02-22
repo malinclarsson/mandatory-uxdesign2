@@ -1,29 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="style.css">
-    <!-- MATERIAL DESIGN -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat Alternates" rel="stylesheet">
     <script src="script.js" defer></script>
-    <!-- AXIOS -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <title>Les Quizerables</title>
-</head>
-<body>
-    <div class="container">
-    <header class="mdc-top-app-bar">
-        <div class="mdc-top-app-bar__row">
-          <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-            <a href="#" class="material-icons mdc-top-app-bar__navigation-icon">menu</a>
-            <span class="mdc-top-app-bar__title">Les Quizerables</span>
-          </section>
-        </div>
-      </header>
-    
-    </div>
-</body>
+    <title>Sir Quiz-A-Lot</title>
+  </head>
+
+  <body>
+    <div class="mds-border">
+    <!--======================================== DRAWER MENU ========================================-->
+      <div class="mds-menubar">
+          <!----------------- menu title ----------------->
+          <div class="mds-menubar-title">
+              <h2 class="mds-menubar-title-text">Sir Quiz-A-Lot</h2>
+          </div>
+          <!----------------- menu choises ----------------->
+          <div class="mds-menubar-list">
+              <div class="mds-menubar-list-item">Back to the Game</div>
+              <div class="mds-menubar-list-item">Stats</div>
+              <div class="mds-menubar-list-item">About</div>
+          </div>
+      </div>
+      <!--======================================== QUIZ SCREEN ========================================-->
+      <!----------------- header ----------------->
+      <div class="mds-container">
+          <header class="mds-header">
+              <i class="mds-header-icon material-icons" data-click="active">menu</i>
+              <hi class="mds-header-text">Sir Quiz-A-Lot</hi>
+          </header>
+          <!--======================================== ABOUT SCREEN ========================================-->
+          <div class="mds-scroll">
+              <main class="mds-body" data-type="inactive"></main>
+              <div class="mds-about mds-display-none">
+                  <p class="mds-about-text">
+                      A quiz is a form of game or mind sport, in which the players (as individuals or in teams) 
+                      attempt to answer questions correctly. <br>
+                      It is a game to test your knowledge about a certain subject. <br>
+                      In some countries, a quiz is also a brief assessment used in education and similar fields 
+                      to measure growth in knowledge, abilities, and/or skills.
+                  </p>
+                  <p class="mds-about-text">
+                      Quizzes are usually scored in points and many quizzes are designed to determine a winner from a group of participants 
+                      – usually the participant with the highest score. <br> 
+                      They may also involve eliminating those who get too many questions wrong, 
+                      the winner being the last man standing.
+                  </p>
+              </div>
+              <!--======================================== STATS SCREEN ========================================-->
+              <div class="mds-stats mds-display-none">
+                  <div class="mds-stats-box">
+                      <p class="mds-stats-title">GAMES PLAYED</p>
+                      <h3 class="mds-stats-text played"></h3>
+                  </div>
+
+                  <div class="mds-stats-box">
+                      <p class="mds-stats-title">RIGHT</p>
+                      <h3 class="mds-stats-text correct"></h3>
+                  </div>
+
+                  <div class="mds-stats-box">
+                      <p class="mds-stats-title">WRONG</p>
+                      <h3 class="mds-stats-text incorrect"></h3>
+                  </div>
+
+                  <div class="mds-stats-box">
+                      <p class="mds-stats-title">PERCENTAGE</p>
+                      <h3 class="mds-stats-text percentage"></h3>
+                  </div>
+              </div>
+          </div>
+          <!--======================================== MAIN SCREEN ========================================-->
+          <!----------------- start ----------------->
+          <button class="mds-body-button">Start Quiz</button>
+
+          <!--======================================== MODAL DIALOG ========================================-->
+          <div class="mds-popup mds-display-none">
+              <h6 class="mds-popup-title--text">DONE!</h6>
+              <p class="mds-popup-supporting--text"></p>
+              <div class="mds-choise">
+                  <span class="mds-choise-button re-start">NEW GAME</span>
+                  <span class="mds-choise-button close">CLOSE</span>
+              </div>
+          </div>
+      </div>
+  </div>
+  </div>
+  </body>
 </html>
